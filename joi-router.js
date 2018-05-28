@@ -246,6 +246,7 @@ function checkValidators(spec) {
 
 function makeBodyParser(spec) {
   return async function parsePayload(ctx, next) {
+    if (ctx.request.body) return await next();
     if (!(spec.validate && spec.validate.type)) return await next();
 
     let opts;
@@ -448,7 +449,7 @@ function validateInput(prop, ctx, validate) {
 methods.forEach((method) => {
   method = method.toLowerCase();
 
-  Router.prototype[method] = function(path) {
+  Router.prototype[method] = function (path) {
     // path, handler1, handler2, ...
     // path, config, handler1
     // path, config, handler1, handler2, ...
